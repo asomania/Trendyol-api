@@ -1,19 +1,28 @@
-import Vue from "vue";
-import Vuex from "vuex";
+import { createStore } from "vuex";
+import { getAllProductsMethod } from "../api/getAllProducts";
 
-Vue.use(Vuex);
-
-export default new Vuex.Store({
+export default createStore({
   state: {
-    // Durumlarınızı burada tanımlayın
+    products: [],
   },
   mutations: {
-    // Mutasyonlarınızı burada tanımlayın
+    setProducts(state, products) {
+      state.products = products;
+    },
   },
   actions: {
-    // Eylemlerinizi burada tanımlayın
-  },
-  getters: {
-    // Getters'ları burada tanımlayın
+    async fetchProducts({ commit }, { shopId, apiKey, apiSecret, options }) {
+      try {
+        const products = await getAllProductsMethod(
+          shopId,
+          apiKey,
+          apiSecret,
+          options
+        );
+        commit("setProducts", products);
+      } catch (error) {
+        console.error(error);
+      }
+    },
   },
 });

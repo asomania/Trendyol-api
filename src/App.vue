@@ -1,30 +1,40 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
   <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
+    <ul>
+      <li v-for="product in products" :key="product.id">
+        {{ product.title }}
+      </li>
+    </ul>
+    <button @click="fetchProducts">Ürünleri Getir</button>
   </div>
-  <HelloWorld msg="Vite + Vue" />
 </template>
 
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
-</style>
+<script>
+import { computed } from "vue";
+import { useStore } from "vuex";
+
+export default {
+  setup() {
+    const store = useStore();
+    const products = computed(() => store.state.products);
+
+    const fetchProducts = () => {
+      const shopId = 123; // Trendyol mağaza ID'si
+      const apiKey = "YOUR_API_KEY";
+      const apiSecret = "YOUR_API_SECRET";
+      const options = {
+        page: 1,
+        size: 10,
+        // Diğer seçenekleri burada belirtin
+      };
+
+      store.dispatch("fetchProducts", { shopId, apiKey, apiSecret, options });
+    };
+
+    return {
+      products,
+      fetchProducts,
+    };
+  },
+};
+</script>

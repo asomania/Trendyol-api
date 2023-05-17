@@ -10,9 +10,7 @@ export const getAllProductsMethod = async (
     throw Error("Please provide page and size properly");
   }
 
-  const token = Buffer.from(`${apiKey}:${apiSecret}`, "utf8").toString(
-    "base64"
-  );
+  const token = btoa(`${apiKey}:${apiSecret}`);
 
   const config = {
     method: "get",
